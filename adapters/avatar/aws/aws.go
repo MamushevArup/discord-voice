@@ -1,17 +1,14 @@
 package aws
 
 import (
-	"bytes"
 	"fmt"
 	"github.com/MamushevArup/ds-voice/config"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/disintegration/imaging"
 	"github.com/google/uuid"
-	"image/png"
-	"mime/multipart"
+	"os"
 	"time"
 )
 
@@ -47,36 +44,14 @@ func New(cfg *config.Config) (CloudService, error) {
 	}, nil
 }
 
-func (c *awsService) UploadOne(fileHeader *multipart.FileHeader) (string, error) {
-
-	file, err := fileHeader.Open()
-	if err != nil {
-		return "", fmt.Errorf("failed to open file \nerror:%w", err)
-	}
-
-	// Decode the PNG image
-	img, err := png.Decode(file)
-	if err != nil {
-		return "", fmt.Errorf("failed to decode PNG image: %w", err)
-	}
-
-	// Resize the image to a manageable size if needed
-	resizedImg := imaging.Resize(img, 100, 0, imaging.Lanczos)
-
-	// Create a buffer to store the resized PNG image
-	buf := new(bytes.Buffer)
-	err = png.Encode(buf, resizedImg)
-	if err != nil {
-		return "", fmt.Errorf("failed to encode resized image: %w", err)
-	}
+func (c *awsService) UploadOne(file *os.File) (string, error) {
 
 	awsFileID := uuid.New().String()
 
-	_, err = c.service.PutObject(&s3.PutObjectInput{
-		Body:   bytes.NewReader(buf.Bytes()),
+	_, err := c.service.PutObject(&s3.PutObjectInput{
+		Body:   file,
 		Bucket: aws.String(c.bucketName),
 		Key:    aws.String(awsFileID),
-		ACL:    aws.String("public-read"),
 	})
 
 	if err != nil {

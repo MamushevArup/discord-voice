@@ -6,14 +6,7 @@ import (
 )
 
 type Config struct {
-	Mongo Mongo `yaml:"mongodb"`
-	Aws   AWS
-}
-
-type Mongo struct {
-	Host     string `yaml:"host"`
-	Port     string `yaml:"port"`
-	Database string `yaml:"database"`
+	Aws AWS
 }
 
 type AWS struct {
@@ -23,9 +16,9 @@ type AWS struct {
 	BucketName      string `env:"AWS_BUCKET_NAME"`
 }
 
-func New(path string) (*Config, error) {
+func New() (*Config, error) {
 	var cfg Config
-	err := cleanenv.ReadConfig(path, &cfg)
+	err := cleanenv.ReadEnv(&cfg)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read config: %w", err)
 	}

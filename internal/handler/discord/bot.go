@@ -2,31 +2,23 @@ package discord
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"sync"
-	"time"
 )
 
-var (
-	rtpVersion  uint8 = 2
-	payloadType uint8 = 0x78
-)
-
-const (
-	sampleRate          = 48000
-	channelCount        = 2
-	recordDuration      = 1 * time.Minute
-	checkChannelSize    = 2 * time.Second
-	disclaimerRecording = "I am recording this voice channel"
-)
+// storage defines method for use cases
+type storage interface {
+	UploadAudio(filePath string) (string, error)
+}
 
 type Bot struct {
 	session        *discordgo.Session
+	storage        storage
 	joinedChannels map[string]bool
-	mu             sync.Mutex
+	stop           chan struct{}
 }
 
-func NewBot(session *discordgo.Session) *Bot {
+func NewBot(session *discordgo.Session, storage2 storage) *Bot {
 	return &Bot{
+		storage:        storage2,
 		session:        session,
 		joinedChannels: make(map[string]bool),
 	}

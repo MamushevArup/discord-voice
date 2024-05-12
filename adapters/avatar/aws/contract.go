@@ -1,8 +1,10 @@
 package aws
 
-import "mime/multipart"
+import (
+	"os"
+)
 
 type CloudService interface {
-	UploadOne(fileHeader *multipart.FileHeader) (uploadID string, err error)
+	UploadOne(file *os.File) (uploadID string, err error)
 	GetOneUrl(uploadID string) (url string, err error)
 }

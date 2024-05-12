@@ -11,8 +11,8 @@ type Handler struct {
 	bot     *discord.Bot
 }
 
-func New(ds *discordgo.Session) *Handler {
-	return &Handler{bot: discord.NewBot(ds)}
+func New(ds *discordgo.Session, useCase *usecase.UseCase) *Handler {
+	return &Handler{bot: discord.NewBot(ds, useCase)}
 }
 
 func (h *Handler) Start() error {
