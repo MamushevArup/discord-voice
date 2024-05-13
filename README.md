@@ -35,6 +35,17 @@ __See help.txt file to get more familiar with proper commands__
 ### Explanation
 
 #### Approach 
-I use clean code architecture approach. Where my
+I use clean code architecture approach. Where my code consist of two layer usecase, handler. And third-party api integration is in adapters.
+Communcate through the interfaces on the consumer side.
+
+To make sure code is properly written you can check it through the linter. Configuration for the linter is provided in this code also.
+
+This project is not provide a repo layer and any storage implementation. As long as there is no need to store any data.
+
+To download it the conversation for particular voice room chat bot send message with some id to download and listen.
+
+Here is how it look likes -- 
+
+![Screenshot 2024-05-13 163842](https://github.com/MamushevArup/discord-voice/assets/93328884/665854ea-ad60-4933-af8e-96fb6c35482a)
 
 
