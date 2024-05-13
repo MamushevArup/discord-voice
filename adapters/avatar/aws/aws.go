@@ -49,9 +49,11 @@ func (c *awsService) UploadOne(file *os.File) (string, error) {
 	awsFileID := uuid.New().String()
 
 	_, err := c.service.PutObject(&s3.PutObjectInput{
-		Body:   file,
-		Bucket: aws.String(c.bucketName),
-		Key:    aws.String(awsFileID),
+		Body:               file,
+		Bucket:             aws.String(c.bucketName),
+		Key:                aws.String(awsFileID),
+		ContentType:        aws.String("audio/ogg"),
+		ContentDisposition: aws.String("inline"),
 	})
 
 	if err != nil {

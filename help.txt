@@ -1,0 +1,6 @@
+!help - see available command and description
+!download-ogg <ID> - command download audio file of group conversation in ogg format
+!download-mp3 <ID> - command download audio file of group conversation in mp3 format
+!download-wav <ID> - command download audio file of group conversation in wav format
+
+<ID> field is sent by this bot when record is finished

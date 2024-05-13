@@ -36,8 +36,6 @@ func main() {
 
 	defer dsSession.Close() // nolint: errcheck
 
-	lg.Info("Bot is now running. Press CTRL+C to exit.")
-
 	s3, err := aws.New(cfg)
 	if err != nil {
 		lg.Fatalf("%v", err)
@@ -45,7 +43,7 @@ func main() {
 
 	useCase := usecase.New(s3)
 
-	hdl := handler.New(dsSession, useCase)
+	hdl := handler.New(dsSession, useCase, lg)
 
 	err = hdl.Start()
 	if err != nil {

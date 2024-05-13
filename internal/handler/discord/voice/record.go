@@ -1,4 +1,4 @@
-package discord
+package voice
 
 import (
 	"fmt"
@@ -8,22 +8,24 @@ import (
 	"github.com/pion/webrtc/v3/pkg/media/oggwriter"
 )
 
-func (b *Bot) recordVoice(c chan *discordgo.Packet) (map[uint32]string, error) {
+func (v *Record) recordVoice(c chan *discordgo.Packet) (map[uint32]string, error) {
 
-	fmt.Println("RECORD STARTS")
+	v.log.Info("Recording voice")
 
 	files := make(map[uint32]media.Writer)
 	filePaths := make(map[uint32]string)
 	for {
 		select {
-		case <-b.stop:
+		case <-v.stop:
 			// Close all file writers
 			for _, f := range files {
 				f.Close() // nolint: errcheck
 			}
+			v.log.Info("Close file writers, recording stopped")
 			return filePaths, nil
 		case p, ok := <-c:
 			if !ok {
+				v.log.Error("Failed to read from channel, giving up on recording")
 				return filePaths, nil
 			}
 			file, ok := files[p.SSRC]

@@ -1,37 +1,34 @@
-package discord
+package voice
 
 import (
-	"fmt"
 	"github.com/bwmarrin/discordgo"
-	"log"
 	"time"
 )
 
-func stopRecord(voiceChannelZero, stop chan struct{}, timer *time.Timer) {
-
+func (v *Record) stopRecord(voiceChannelZero, stop chan struct{}, timer *time.Timer) {
 	for {
 		select {
 		// wait for signal when members reach 0
 		case <-voiceChannelZero:
 			close(stop)
-			fmt.Println(stopRecordMessage)
+			v.log.Info(stopRecordMessage)
 			return
 		case <-timer.C:
 			close(stop)
-			fmt.Println(stopTimeMessage)
+			v.log.Info(stopTimeMessage)
 			return
 		}
 	}
 }
 
-func checkMemberSize(session *discordgo.Session, channel *discordgo.ChannelCreate, voiceChannelZero chan struct{}) {
+func (v *Record) checkMemberSize(session *discordgo.Session, channel *discordgo.ChannelCreate, voiceChannelZero chan struct{}) {
 	// ticker go every timer and check for channel size
 	ticker := time.NewTicker(checkChannelSize)
 
 	for range ticker.C {
 		guild, err := session.State.Guild(channel.GuildID)
 		if err != nil {
-			log.Printf("Failed to get guild info: %v", err)
+			v.log.Errorf("Failed to get guild info: %v", err)
 			return
 		}
 
@@ -41,7 +38,7 @@ func checkMemberSize(session *discordgo.Session, channel *discordgo.ChannelCreat
 			if vs.ChannelID == channel.ID {
 				member, err := session.GuildMember(guild.ID, vs.UserID)
 				if err != nil {
-					log.Printf("Failed to get member info: %v", err)
+					v.log.Errorf("Failed to get member (memberID) %v, info: %v", member.User.ID, err)
 					return
 				}
 				if !member.User.Bot {
@@ -52,7 +49,7 @@ func checkMemberSize(session *discordgo.Session, channel *discordgo.ChannelCreat
 		}
 
 		if onlyBotsInChannel {
-			fmt.Println(channelOnlyBots)
+			v.log.Info(channelOnlyBots)
 			ticker.Stop()
 			voiceChannelZero <- struct{}{}
 			return
