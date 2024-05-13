@@ -2,6 +2,8 @@
 
 This program allows you to capture and record voice conversations in Discord voice channels, as well as convert audio files between different formats. It also provides functionality to send recorded audio back to the voice channel for downloading.
 Download format supported -> wav, ogg, mp3
+*Command available -> help, download-mp3, download-wav, download-ogg*
+__See help.txt file to get more familiar with proper commands__
 
 ### Prerequisites
 
@@ -27,6 +29,9 @@ Download format supported -> wav, ogg, mp3
   - Specify the required values as in the .env.example shows
 6. Run the program ```go run cmd/main/main.go``` command
 
+### Explanation
 
+#### Approach 
+I use clean code architecture approach. Where my
 
 
