@@ -20,7 +20,8 @@ func Download(url, uploadID string) (string, error) {
 
 	filePath := filepath.Join(tempDir, uploadID+".ogg")
 
-	out, err := os.Create(filePath)
+	clean := filepath.Clean(filePath)
+	out, err := os.Create(clean)
 	if err != nil {
 		return "", fmt.Errorf("failed to create temporary file: %v", err)
 	}

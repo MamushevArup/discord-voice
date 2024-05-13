@@ -8,9 +8,7 @@ import (
 )
 
 type Handler struct {
-	useCase *usecase.UseCase
-	bot     *discord.Bot
-	logger  *logger.Logger
+	bot *discord.Bot
 }
 
 func New(ds *discordgo.Session, useCase *usecase.UseCase, logger *logger.Logger) *Handler {

@@ -22,4 +22,3 @@ const (
 	stopTimeMessage   = "Record stopped time limit reached"
 	channelOnlyBots   = "Record stopped all users are bots"
 )
-

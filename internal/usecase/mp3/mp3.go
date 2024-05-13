@@ -5,14 +5,21 @@ import (
 	"github.com/MamushevArup/ds-voice/internal/usecase/ogg"
 	"os"
 	"os/exec"
+	"path/filepath"
 )
 
 func Download(url, uploadID string) (string, error) {
 	// Download the file
 	oggFilePath, err := ogg.Download(url, uploadID)
+	if err != nil {
+		return "", fmt.Errorf("failed to download OGG file: %v", err)
+	}
 
 	// Define the output file path
 	mp3FilePath := oggFilePath[:len(oggFilePath)-len(".ogg")] + ".mp3"
+
+	oggFilePath = filepath.Clean(oggFilePath)
+	mp3FilePath = filepath.Clean(mp3FilePath)
 
 	// Create the ffmpeg command
 	cmd := exec.Command("ffmpeg", "-i", oggFilePath, mp3FilePath)

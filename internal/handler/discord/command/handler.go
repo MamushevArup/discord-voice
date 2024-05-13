@@ -4,6 +4,7 @@ import (
 	"github.com/MamushevArup/ds-voice/internal/usecase"
 	"github.com/bwmarrin/discordgo"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -41,7 +42,8 @@ func (b *Execute) mp3Audio(id string, s *discordgo.Session, m *discordgo.Message
 	}
 
 	// Open the local file
-	f, err := os.Open(filePath)
+	cleanedPath := filepath.Clean(filePath)
+	f, err := os.Open(cleanedPath)
 	if err != nil {
 		b.log.Errorf("Failed to open file: %v", err)
 		return
