@@ -48,4 +48,14 @@ Here is how it look likes --
 
 ![Screenshot 2024-05-13 163842](https://github.com/MamushevArup/discord-voice/assets/93328884/665854ea-ad60-4933-af8e-96fb6c35482a)
 
+## Notes
+All variables can be changed in the code vars.go file
+
+When voice channel created bot joins and wait for 5 second before start recording.
+After five second it record 15 second or until room is empty (means no real user in there) also if in the room will two or three or more bots it will also stop record.
+
+In aws presigned object is accessible 48 hours. 
+
+
+
 
